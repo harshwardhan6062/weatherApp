@@ -5,6 +5,7 @@ const geoCode = require('../utils/getLocation.js')
 const atmosphere = require('../utils/atmosphere.js')
 
 const app = express()
+const port = process.env.PORT || 3000
 
 const servingDirectoryPath = path.join(__dirname , '../servingFiles')
 const viewsDirectoryPath = path.join(__dirname , '../views')
@@ -78,6 +79,6 @@ app.get('*' , (req , res) => {
     })
 })
 
-app.listen(3000 , () => {
+app.listen(port , () => {
     console.log('Server is up on port 3000 !')
 })
