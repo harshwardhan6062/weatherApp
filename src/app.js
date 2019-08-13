@@ -1,8 +1,8 @@
 const express = require('express')
 const path = require('path')
 const hbs = require('hbs')
-const geoCode = require('../utils/getLocation.js')
-const atmosphere = require('../utils/atmosphere.js')
+const geocode = require('../utils/getLocation.js')
+const forecast= require('../utils/atmosphere.js')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -31,21 +31,26 @@ app.get('/help' , (req , res) => {
     })
 })
 
-app.get('/weather' , (req , res) => {
-    if(!req.query.address){
-        return res.send('PLEASE ENTER A ADDRESS !')
+app.get('/weather', (req, res) => {
+    if (!req.query.address) {
+        return res.send({
+            error: 'You must provide an address!'
+        })
     }
 
-    geoCode(req.query.address , (error , { latitude, longitude } = {}) => {
-        if(error)
-        return res.send('SOME CONNECTIVITY PROBLEM !')
+    geocode(req.query.address, (error, { latitude, longitude, location } = {}) => {
+        if (error) {
+            return res.send({ error })
+        }
 
-        atmosphere(latitude , longitude , (err , foreCastData) => {
-            if(err)
-            return res.send('SOME INTERNET CONNECTIITY ISSUE !')
+        forecast(latitude, longitude, (error, forecastData) => {
+            if (error) {
+                return res.send({ error })
+            }
 
             res.send({
-                forecast: 'The current atmosphere for ' + req.query.address + ' is ' + foreCastData.summary ,
+                forecast: forecastData,
+                location,
                 address: req.query.address
             })
         })
