@@ -18,7 +18,7 @@ weatherForm.addEventListener('submit' , (e) => {
 
             else{
                 messageOne.textContent = 'hello'
-                messageTwo.textContent = 'fuck u'
+                messageTwo.textContent = 'Nothing'
             }
         })
     })
